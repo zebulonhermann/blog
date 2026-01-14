@@ -10,16 +10,13 @@ type SortSetting = ["date" | "views", "desc" | "asc"];
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export function Posts({ posts: initialPosts }) {
-  console.log("[v0] initialPosts:", initialPosts);
   const { data: posts } = useSWR("/api/posts", fetcher, {
     fallbackData: initialPosts,
     refreshInterval: 5000,
   });
-  console.log("[v0] posts from SWR:", posts);
 
-  if (!posts || !Array.isArray(posts)) {
-    console.log("[v0] posts is not an array or is null");
-    return <main className="max-w-2xl m-auto mb-10 text-sm">Loading...</main>;
+  if (!posts || !Array.isArray(posts) || posts.length === 0) {
+    return <main className="max-w-2xl m-auto mb-10 text-sm">No posts found.</main>;
   }
 
   return (
@@ -32,13 +29,10 @@ export function Posts({ posts: initialPosts }) {
 }
 
 function List({ posts }) {
-  console.log("[v0] List received posts:", posts);
   return (
     <ul>
       {posts.map((post, i: number) => {
-        console.log("[v0] Rendering post:", post.id, "date:", post.date);
         const year = getYear(post.date);
-        console.log("[v0] Parsed year:", year);
         const firstOfYear =
           !posts[i - 1] || getYear(posts[i - 1].date) !== year;
         const lastOfYear = !posts[i + 1] || getYear(posts[i + 1].date) !== year;
