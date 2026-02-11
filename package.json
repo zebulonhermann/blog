@@ -41,7 +41,7 @@
     ]
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "postinstall": "node ./fonts/init.mjs"
